@@ -1,0 +1,15 @@
+name: kimura
+services:
+  # mysql服务容器
+  mysql8.0:
+    container_name: mysql
+    restart: unless-stopped
+    image: mysql:8.0.29
+    ports:
+      - "3306:3306"
+    volumes:
+      - /usr/local/mysql/conf:/etc/mysql/conf.d
+      - /usr/local/mysql/logs:/logs
+      - /usr/local/mysql/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
