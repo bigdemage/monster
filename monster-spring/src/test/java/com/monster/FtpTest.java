@@ -17,12 +17,12 @@ public class FtpTest {
     private FtpUtil ftpUtil;
     @Test
     void upload(){
-        String file="D:\\桌面东西\\截图\\image-20240624140636330.png";
+        String file="D:\\桌面东西\\截图\\1.png";
         InputStream in =null;
-        String uploadPath="app/ayi/2/ll";
+        String uploadPath="1/2016/11/16/55/FIR";
         try{
              in = new FileInputStream(file);
-            ftpUtil.uploadFile("2.png",uploadPath,in);
+            ftpUtil.uploadFile("thisispic.png",uploadPath,in);
         }catch (Exception e){
             e.printStackTrace();
         }finally {

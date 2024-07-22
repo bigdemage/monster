@@ -5,11 +5,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
+import org.apache.commons.net.ftp.FTPSClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.SocketException;
 
 /**
@@ -19,7 +21,7 @@ import java.net.SocketException;
 @Slf4j
 public class FtpUtil {
 
-    private FTPClient ftpClient = new FTPClient();
+    private FTPSClient ftpClient = new FTPSClient("TLS", true);
 
     //本地字符编码
     private static String LOCAL_CHARSET = "UTF-8";
@@ -53,13 +55,15 @@ public class FtpUtil {
             log.info("向FTP服务器上传文件,url:{},port:{},path:{},username:{},password:{},filename:{}", url, port, path, username, password, filename);
             ftpClient.connect(url, port);
             //登录
-            ftpClient.login(username, password);
+            boolean loginflag=ftpClient.login(username, password);
+
             //ftp连接的返回码：230表示连接成功，其他值表示连接失败
             int reply = ftpClient.getReplyCode();
             log.info("ftp登录结果:{}", reply);
             if (!FTPReply.isPositiveCompletion(reply)) {
                 ftpClient.disconnect();
-                log.error("FTP上传文件还没开始就断开了");
+                log.error("未连接到FTP，用户名密码错误");
+                return;
             }
             /**
              * 这里修改为被动模式
@@ -72,15 +76,17 @@ public class FtpUtil {
 //            workingDirectory(ftpClient, path);
             //修改上传目录，没有则创建
             setUpFilePath(ftpClient, path);
-//        //查看服务器的编码格式是UTF-8还是GBK 开启服务器对UTF-8的支持，如果服务器支持就用UTF-8编码，否则就使用本地编码（GBK）.
-            if (FTPReply.isPositiveCompletion(ftpClient.sendCommand("OPTS UTF8", "ON"))) {
-                LOCAL_CHARSET = "UTF-8";
-            }
+            //查看服务器的编码格式是UTF-8还是GBK 开启服务器对UTF-8的支持，如果服务器支持就用UTF-8编码，否则就使用本地编码（GBK）.
+//            if (FTPReply.isPositiveCompletion(ftpClient.sendCommand("OPTS UTF8", "ON"))) {
+//                LOCAL_CHARSET = "UTF-8";
+//            }
             ftpClient.setControlEncoding(LOCAL_CHARSET);
             //ftp上传文件是以文本形式传输的，所以多媒体文件会失真，需要转为二进制形式传输
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            ftpClient.execPBSZ(0);
+            ftpClient.execPROT("P");
             //文件名字进行编码转换
-            boolean result = ftpClient.storeFile(filename, input);
+            boolean result = ftpClient.storeFile(utf8TOiso88591(filename,LOCAL_CHARSET), input);
             log.info("上传结果:{}", result);
             ftpClient.logout();
             if (ftpClient.isConnected()) {

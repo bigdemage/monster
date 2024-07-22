@@ -19,13 +19,13 @@ public class BaseConsumer {
         //指明nameserver
         consumer.setNamesrvAddr(NAME_SERVER_URL);
         //订阅主题--第二个参数是tag，*表示全部接收
-        consumer.subscribe("mytopic1","*");
+        consumer.subscribe("TestTopic","*");
         //创建监听，当broker推送消息过来时调用
         consumer.registerMessageListener(new MessageListenerConcurrently() {
             /**
              * list表示broker推送过来的消息都在list里
              * @param list
-             * @param consumeConcurrentlyContext
+             * @param
              * @return
              */
             @Override

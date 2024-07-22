@@ -17,12 +17,12 @@ public class BaseProduce {
         //连接nameServer
         producer.setNamesrvAddr(NAME_SERVER_URL);
 
-        producer.setSendMsgTimeout(5000);
+        producer.setSendMsgTimeout(60000);
         //启动生产者
         producer.start();
         for(int i=1 ;i<=10;i++){
             //创建消息
-            Message message=new Message("base_topic","tagA",("hello mother"+i).getBytes(StandardCharsets.UTF_8));
+            Message message=new Message("TestTopic","tagA",("hello mother"+i).getBytes(StandardCharsets.UTF_8));
             //发送消息
             SendResult result=producer.send(message);
             System.out.println("结果:"+result);
