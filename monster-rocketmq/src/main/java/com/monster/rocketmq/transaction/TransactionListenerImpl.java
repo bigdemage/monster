@@ -6,6 +6,7 @@ import org.apache.rocketmq.client.producer.TransactionListener;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageExt;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -36,7 +37,9 @@ public class TransactionListenerImpl implements TransactionListener {
      */
     @Override
     public LocalTransactionState checkLocalTransaction(MessageExt msg) {
-        log.info("check次数：{}",count.getAndIncrement());
+        log.info("{}开始检测本地事务", LocalDateTime.now());
+//        log.info("check次数：{}",count.getAndIncrement());
+        log.info("msg:{}",new String(msg.getBody()));
         if("Td".equals(msg.getTags())){
             return LocalTransactionState.COMMIT_MESSAGE;
         }else{

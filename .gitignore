@@ -48,3 +48,4 @@ dubbo-demo/dubbo-demo-triple/build/*
 
 # global registry center
 .tmp
+monster-spring/src/main/resources/font/simsun.ttc

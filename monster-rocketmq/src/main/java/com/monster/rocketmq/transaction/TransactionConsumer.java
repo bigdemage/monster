@@ -18,7 +18,7 @@ public class TransactionConsumer {
 
 
     public static void main(String[] args) throws MQClientException {
-        DefaultMQPushConsumer consumer=new DefaultMQPushConsumer("dd_group");
+        DefaultMQPushConsumer consumer=new DefaultMQPushConsumer("my-consumer1");
         consumer.setNamesrvAddr(NAME_SERVER_URL);
         consumer.subscribe("transaction_topic","*");
 

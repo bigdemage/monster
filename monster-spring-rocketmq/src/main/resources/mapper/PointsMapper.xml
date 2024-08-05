@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.monster.sr.mapper.PointsMapper">
+
+    <resultMap id="BaseResultMap" type="com.monster.sr.entity.PointsPO">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="order_id" property="orderId" />
+        <result column="points" property="points" />
+        <result column="remarks" property="remarks" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <insert id="insert" parameterType="com.monster.sr.entity.PointsPO">
+        INSERT INTO t_points (id, user_id, order_id, points, remarks, create_time)
+        VALUES (#{id}, #{userId}, #{orderId}, #{points}, #{remarks}, #{createTime})
+    </insert>
+
+    <select id="getById" resultMap="BaseResultMap" parameterType="Long">
+        SELECT id, user_id, order_id, points, remarks, create_time
+        FROM t_points
+        WHERE id = #{id}
+    </select>
+
+    <select id="getByOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+         SELECT id, user_id, order_id, points, remarks, create_time
+        FROM t_points
+        WHERE order_id = #{orderId}
+    </select>
+
+    <update id="update" parameterType="com.monster.sr.entity.PointsPO">
+        UPDATE t_points
+        SET user_id = #{userId}, order_id = #{orderId}, points = #{points}, remarks = #{remarks}, create_time = #{createTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        DELETE FROM t_points
+        WHERE id = #{id}
+    </delete>
+</mapper>

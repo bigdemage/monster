@@ -1,6 +1,7 @@
 package com.monster.rocketmq.transaction;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.TransactionListener;
 import org.apache.rocketmq.client.producer.TransactionMQProducer;
 import org.apache.rocketmq.client.producer.TransactionSendResult;
@@ -14,6 +15,7 @@ import static com.monster.rocketmq.Config.NAME_SERVER_URL;
 /**
  * 事务消息
  */
+@Slf4j
 public class TransactionProducer {
 
     public static void main(String[] args) throws Exception{
@@ -45,7 +47,7 @@ public class TransactionProducer {
             Message msg =new Message("transaction_topic",tag,("hi kiki"+i).getBytes(StandardCharsets.UTF_8));
             //使用事务发送
             TransactionSendResult result=producer.sendMessageInTransaction(msg,"token");
-            System.out.println(result);
+            log.info("发送信息:{}",result);
         }
 
 //        producer.shutdown();

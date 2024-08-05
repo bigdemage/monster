@@ -12,6 +12,7 @@
         <module>monster-es</module>
         <module>monster-rocketmq</module>
         <module>monster-spring</module>
+        <module>monster-spring-rocketmq</module>
     </modules>
 
     <packaging>pom</packaging>
